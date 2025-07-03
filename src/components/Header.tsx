@@ -1,15 +1,27 @@
-import { Search, ShoppingBag, User, Plus } from "lucide-react";
+import { Search, ShoppingBag, User, Plus, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
   return (
     <header className="bg-card border-b shadow-card sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-primary">MarketPlace</h1>
+            <Link to="/">
+              <h1 className="text-2xl font-bold text-primary cursor-pointer">MarketPlace</h1>
+            </Link>
           </div>
 
           {/* Search Bar */}
@@ -26,16 +38,32 @@ const Header = () => {
 
           {/* Navigation Actions */}
           <div className="flex items-center space-x-4">
-            <Button variant="hero" className="hidden sm:flex">
-              <Plus className="h-4 w-4 mr-2" />
-              Sell Item
-            </Button>
-            <Button variant="ghost" size="icon">
-              <ShoppingBag className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-            </Button>
+            <Link to="/items">
+              <Button variant="ghost">Browse Items</Button>
+            </Link>
+            
+            {user ? (
+              <>
+                <Link to="/sell">
+                  <Button variant="hero" className="hidden sm:flex">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Sell Item
+                  </Button>
+                </Link>
+                <Link to="/profile">
+                  <Button variant="ghost" size="icon">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </Link>
+                <Button variant="ghost" size="icon" onClick={handleSignOut}>
+                  <LogOut className="h-5 w-5" />
+                </Button>
+              </>
+            ) : (
+              <Link to="/auth">
+                <Button variant="hero">Sign In</Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -10,6 +10,8 @@ interface ItemCardProps {
   condition: "new" | "like-new" | "good" | "fair";
   location: string;
   isLiked?: boolean;
+  seller?: string;
+  category?: string;
 }
 
 const ItemCard = ({ 
@@ -18,7 +20,9 @@ const ItemCard = ({
   image, 
   condition, 
   location, 
-  isLiked = false 
+  isLiked = false,
+  seller,
+  category
 }: ItemCardProps) => {
   const conditionColors = {
     "new": "bg-secondary text-secondary-foreground",
@@ -56,9 +60,21 @@ const ItemCard = ({
         <div className="text-2xl font-bold text-primary mb-2">
           ${price.toLocaleString()}
         </div>
-        <div className="flex items-center text-sm text-muted-foreground">
-          <MapPin className="h-4 w-4 mr-1" />
-          {location}
+        <div className="space-y-1">
+          <div className="flex items-center text-sm text-muted-foreground">
+            <MapPin className="h-4 w-4 mr-1" />
+            {location}
+          </div>
+          {seller && (
+            <div className="text-xs text-muted-foreground">
+              Seller: {seller}
+            </div>
+          )}
+          {category && (
+            <div className="text-xs text-muted-foreground">
+              {category}
+            </div>
+          )}
         </div>
       </div>
     </div>
